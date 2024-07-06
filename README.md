@@ -79,7 +79,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Your Name** - *Initial work* - [YourProfile](https://github.com/YourProfile)
+* **Levan Jokhadze** - *Initial work* - (https://github.com/LevanJokhadze))
 
 ## License
 
