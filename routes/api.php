@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\V1\UsersController;
-use App\Http\Controllers\API\V1\ContactController;
+use App\Http\Controllers\API\V1\User\UsersController;
+use App\Http\Controllers\API\V1\User\ContactController;
 
 /*
 |--------------------------------------------------------------------------
