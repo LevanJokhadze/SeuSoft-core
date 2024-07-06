@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API\V1\User;
 
-use App\Models\contact;
+use App\Models\API\V1\User\contact;
 use App\Http\Requests\StorecontactRequest;
 use App\Http\Requests\UpdatecontactRequest;
 use App\Http\Controllers\Controller;
@@ -26,16 +26,20 @@ class ContactController extends Controller
      */
     public function store(StorecontactRequest $request)
     {
-        $contact = new Contact; 
+        $contact = new Contact;
         $contact->name = $request->name;
+        $contact->last_name = $request->last_name;
         $contact->email = $request->email;
+        $contact->number = $request->number;
+        $contact->service = $request->service;
+        $contact->company = $request->company;
         $contact->message = $request->message;  
-        $contact->save();
-        \Log::info('Request Data:', $request->all());
+        
         return response()->json([
             'message' => 'Contact created successfully',
             'data' => $contact
-        ], 201); 
+        ], 201);  
+
     }
 
     /**
