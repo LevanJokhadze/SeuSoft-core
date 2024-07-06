@@ -33,14 +33,16 @@ class ContactController extends Controller
         $contact->number = $request->number;
         $contact->service = $request->service;
         $contact->company = $request->company;
-        $contact->message = $request->message;  
-        
-        return response()->json([
-            'message' => 'Contact created successfully',
-            'data' => $contact
-        ], 201);  
-
+        $contact->message = $request->message;
+    
+        if ($contact->save()) {
+            return response()->json([
+                'message' => 'Contact created successfully',
+                'data' => $contact
+            ], 201);  
+        }
     }
+    
 
     /**
      * Display the specified resource.
