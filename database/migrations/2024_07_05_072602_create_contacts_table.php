@@ -12,12 +12,14 @@ return new class extends Migration
             $table->id();
             $table->string('name'); 
             $table->string('last_name'); 
-            $table->string('email');
+            $table->string('email')->unique();
             $table->integer('number');
             $table->text('service');
             $table->string('company');
             $table->text('message');
-            $table->timestamps();   
+            $table->timestamps();
+
+            $table->index(['name', 'last_name']);
         });
     }
 
