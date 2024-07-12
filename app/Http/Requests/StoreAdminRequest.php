@@ -13,7 +13,7 @@ class StoreAdminRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StoreAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|string|exists:admins,title', // Check if the title exists in the database
+            'body' => 'required|string', // Example validation rule
         ];
     }
 }
