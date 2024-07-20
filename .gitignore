@@ -1,34 +1,8 @@
-/vendor/
-/node_modules/
-
-# Laravel 5 & up specific caches and storage
-bootstrap/cache/*.php
-storage/*.key
-storage/framework/*.php
-storage/framework/cache/data/*
-storage/framework/sessions/*
-storage/framework/views/*.php
-storage/logs/*.log
-
-# Public storage
+/vendor
+/node_modules
+/.env
+/.idea
+/.vscode
 /public/storage
-
-# Environment files
-.env
-.env.backup
-.env.testing
-.env.*.local
-
-# IDE and editor files
-/.idea/
-/.vscode/
-*.sublime-workspace
-*.sublime-project
-
-# Operating system files
-.DS_Store
-Thumbs.db
-
-# Local configuration files
-Homestead.json
-Homestead.yaml
+/storage/*.key
+/vendor/*

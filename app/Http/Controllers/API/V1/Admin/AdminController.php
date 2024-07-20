@@ -27,7 +27,7 @@ class AdminController extends Controller
 
     public function update(Request $request, $title)
     {
-        $admin = Admin::where('title', $title)->first();
+        $admin = Admin::where('id', $request->id)->first();
     
         if ($admin) {
             $admin->title = $request->title;
