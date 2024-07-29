@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
-use App\Models\AI\V1\Admin\UpdateContact;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateContactRequest;
 use App\Http\Requests\UpdateUpdateContactRequest;
@@ -27,7 +26,7 @@ class UpdateContactController extends Controller
         ], 201); 
     }
 
-    public function update(Request $request, $id)
+    public function update(storeUpdateContactRequest $request)
     {
         $admin = $this->updateContactService->updateContact($request->id, $request->title, $request->address, $request->email, $request->number, $request->fb, $request->ig, $request->twitter, $request->in, $request->copyright);
 
