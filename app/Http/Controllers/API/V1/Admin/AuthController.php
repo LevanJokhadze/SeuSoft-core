@@ -6,10 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\API\V1\Admin\Auth as User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Google\Cloud\RecaptchaEnterprise\V1\RecaptchaEnterpriseServiceClient;
-use Google\Cloud\RecaptchaEnterprise\V1\Event;
-use Google\Cloud\RecaptchaEnterprise\V1\Assessment;
-use Google\Cloud\RecaptchaEnterprise\V1\TokenProperties\InvalidReason;
+use Illuminate\Support\Facades\Http;
 
 class AuthController {
 
@@ -23,7 +20,7 @@ class AuthController {
 
         Log::info('Login attempt', ['email' => $credentials['email']]);
 
-        $recaptchaScore = $this->verifyRecaptcha($credentials['recaptcha_token'], 'login_action');
+        $recaptchaScore = $this->verifyRecaptcha($credentials['recaptcha_token']);
 
         if ($recaptchaScore === false || $recaptchaScore < 0.5) {
             Log::warning('Login failed: Invalid reCAPTCHA', ['email' => $credentials['email']]);
@@ -52,32 +49,22 @@ class AuthController {
         ]);
     }
 
-    private function verifyRecaptcha($token, $action)
+    private function verifyRecaptcha($token)
     {
         try {
-            $client = new RecaptchaEnterpriseServiceClient();
-            $projectName = $client->projectName(config('services.recaptcha.project_id'));
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $token
+            ]);
 
-            $event = (new Event())
-                ->setSiteKey(config('services.recaptcha.site_key'))
-                ->setToken($token);
+            $body = $response->json();
 
-            $assessment = (new Assessment())
-                ->setEvent($event);
-
-            $response = $client->createAssessment($projectName, $assessment);
-
-            if ($response->getTokenProperties()->getValid() == false) {
-                Log::error('reCAPTCHA token invalid: ' . InvalidReason::name($response->getTokenProperties()->getInvalidReason()));
+            if (!$body['success']) {
+                Log::error('reCAPTCHA verification failed: ' . json_encode($body['error-codes']));
                 return false;
             }
 
-            if ($response->getTokenProperties()->getAction() != $action) {
-                Log::error('reCAPTCHA action mismatch');
-                return false;
-            }
-
-            return $response->getRiskAnalysis()->getScore();
+            return $body['score'];
         } catch (\Exception $e) {
             Log::error('reCAPTCHA validation error: ' . $e->getMessage());
             return false;

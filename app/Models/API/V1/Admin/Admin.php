@@ -7,4 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Admin extends Model
 {
     protected $table = 'products_table';
+    protected $casts = [
+        'titles' => 'array',
+        'images' => 'array',
+    ];
 }
