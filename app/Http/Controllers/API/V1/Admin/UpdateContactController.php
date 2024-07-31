@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateContactRequest;
 use App\Http\Requests\UpdateUpdateContactRequest;
 use App\Services\UpdateContactServices;
+use Illuminate\Http\Request;
 
 class UpdateContactController extends Controller
 {
@@ -16,13 +17,23 @@ class UpdateContactController extends Controller
         $this->updateContactService = $updateContactService;
     }
 
-    public function store(storeUpdateContactRequest $request)
+    public function store(Request $request)
     {
-        $admin = $this->updateContactService->createContact($request->id, $request->title, $request->address, $request->email, $request->number, $request->fb, $request->ig, $request->twitter, $request->in, $request->copyright);
+        $contact = $this->updateContactService->createContact(
+            $request->title,
+            $request->address,
+            $request->email,
+            $request->number,
+            $request->fb,
+            $request->ig,
+            $request->twitter,
+            $request->in,
+            $request->copyright
+        );
 
         return response()->json([
-            'message' => 'Admin created successfully',
-            'data' => $admin
+            'message' => 'Contact created successfully',
+            'data' => $contact
         ], 201); 
     }
 
