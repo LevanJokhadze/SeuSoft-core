@@ -32,12 +32,12 @@ class AdminServices
 
     public function getProduct($id)
     {
-        return Product::find($id);
+        return Admin::find($id);
     }
 
     public function deleteProduct($id)
     {
-        $product = Product::find($id);
+        $product = Admin::find($id);
         if ($product) {
             return $product->delete();
         }

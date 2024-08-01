@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->text('body')->nullable();
             $table->json('titles')->nullable();
-            $table->json('images')->nullable();
+            $table->binary('images')->nullable(); // Changed to binary
             $table->timestamps();
         });
     }

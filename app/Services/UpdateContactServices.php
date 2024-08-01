@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\API\V1\Admin\UpdateContact;
@@ -24,20 +25,21 @@ class UpdateContactServices
 
     public function updateContact($id, $title, $address, $email, $number, $fb, $ig, $twitter, $in, $copyright)
     {
-        $admin = UpdateContact::where('id', $id)->first();
-    
-        if ($admin) {
-            $admin->title = $title;
-            $admin->address = $address;
-            $admin->email = $email;
-            $admin->number = $number;
-            $admin->fb = $fb;
-            $admin->ig = $ig;
-            $admin->twitter = $twitter;
-            $admin->in = $in;
-            $admin->copyright = $copyright;
-            $admin->save();
-            return $admin;
+        $contact = UpdateContact::find($id);
+
+        if ($contact) {
+            $contact->title = $title ?? $contact->title;
+            $contact->address = $address ?? $contact->address;
+            $contact->email = $email ?? $contact->email;
+            $contact->number = $number ?? $contact->number;
+            $contact->fb = $fb ?? $contact->fb;
+            $contact->ig = $ig ?? $contact->ig;
+            $contact->twitter = $twitter ?? $contact->twitter;
+            $contact->in = $in ?? $contact->in;
+            $contact->copyright = $copyright ?? $contact->copyright;
+            $contact->save();
+
+            return $contact;
         } else {
             return null;
         }
