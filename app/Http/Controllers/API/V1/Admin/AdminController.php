@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\API\V1\Admin;
 
 use App\Http\Controllers\Controller;
@@ -7,6 +6,7 @@ use App\Services\AdminServices;
 use App\Services\UltraServices;
 use App\Http\Requests\StoreAdminRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -35,8 +35,8 @@ class AdminController extends Controller
                 $product = $this->ultraServices->createUltraService(
                     $request->id, 
                     $request->title,
-                    $request->titles,
-                    $request->images
+                    json_decode($request->titles),
+                    $request->file('images')
                 );
                 
                 $message = 'Ultra product created successfully';
@@ -70,7 +70,7 @@ class AdminController extends Controller
                 'data' => $product
             ], 200);
         } catch (\Exception $e) {
-            \Log::error('Error in AdminController@edit: ' . $e->getMessage());
+            Log::error('Error in AdminController@edit: ' . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred while retrieving the product',
                 'error' => $e->getMessage()
@@ -93,7 +93,7 @@ class AdminController extends Controller
                 ], 404);
             }
         } catch (\Exception $e) {
-            \Log::error('Error in AdminController@delete: ' . $e->getMessage());
+            Log::error('Error in AdminController@delete: ' . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred while deleting the product',
                 'error' => $e->getMessage()

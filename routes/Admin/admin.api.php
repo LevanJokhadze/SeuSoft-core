@@ -19,6 +19,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/recaptcha-site-key', [AuthController::class, 'getRecaptchaSiteKey']);
 
     // New routes
-    Route::get("/v1/admin/edit-product/{id}", [AdminController::class, "edit"]);
+    Route::put("/v1/admin/edit-product/{id}", [AdminController::class, "edit"]);
     Route::delete("/v1/admin/delete-product/{id}", [AdminController::class, "delete"]);
 });

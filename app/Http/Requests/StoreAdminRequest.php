@@ -24,11 +24,12 @@ class StoreAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:products,id',
-            'title' => 'sometimes|string',
-            'body' => 'sometimes|string',
-            'titles' => 'sometimes|json',
-            'images' => 'sometimes|json',
+            'title' => 'required|string',
+            'body' => 'required_if:type,1|string',
+            'titles' => 'required_if:type,2|json',
+            'images' => 'required_if:type,2|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'type' => 'required|in:1,2',
         ];
     }
 }
