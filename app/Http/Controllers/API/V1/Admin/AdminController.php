@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Services\AdminServices;
 use App\Services\UltraServices;
+use App\Http\Requests\StoreAdminRequest;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -14,63 +15,89 @@ class AdminController extends Controller
 
     public function __construct(AdminServices $adminServices, UltraServices $ultraServices)
     {
+        $this->middleware('auth:sanctum');
         $this->adminServices = $adminServices;
         $this->ultraServices = $ultraServices;
     }
 
-    public function store(Request $request)
+    public function store(StoreAdminRequest $request)
     {
-        if ($request->type == 1) {
-            $service = $this->adminServices->createService(
-                $request->id, 
-                $request->title, 
-                $request->body, 
-                $request->type
-            );
-            
-            $message = 'Regular service created successfully';
-        } else {
-            $service = $this->ultraServices->createUltraService(
-                $request->id, 
-                $request->title,
-                $request->titles,
-                $request->images
-            );
-            
-            $message = 'Ultra service created successfully';
+        try {
+            if ($request->type == 1) {
+                $product = $this->adminServices->createService(
+                    $request->id, 
+                    $request->title, 
+                    $request->body
+                );
+                
+                $message = 'Regular product created successfully';
+            } else {
+                $product = $this->ultraServices->createUltraService(
+                    $request->id, 
+                    $request->title,
+                    $request->titles,
+                    $request->images
+                );
+                
+                $message = 'Ultra product created successfully';
+            }
+    
+            return response()->json([
+                'message' => $message,
+                'data' => $product
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error('Error in AdminController@store: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'An error occurred while creating the product',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'message' => $message,
-            'data' => $service
-        ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function edit($id)
     {
-        if ($request->type == 1) {
-            $service = $this->adminServices->updateService(
-                $id, 
-                $request->title, 
-                $request->body
-            );
-        } else {
-            $service = $this->ultraServices->updateUltraService(
-                $id, 
-                $request->titles, 
-                $request->images
-            );
-        }
+        try {
+            $product = $this->adminServices->getProduct($id);
+            
+            if (!$product) {
+                return response()->json([
+                    'message' => 'Product not found',
+                ], 404);
+            }
 
-        if ($service) {
             return response()->json([
-                'message' => 'Service updated successfully',
-                'data' => $service
+                'data' => $product
             ], 200);
-        } else {
+        } catch (\Exception $e) {
+            \Log::error('Error in AdminController@edit: ' . $e->getMessage());
             return response()->json([
-                'message' => 'Service not found',
-            ], 404);
+                'message' => 'An error occurred while retrieving the product',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $result = $this->adminServices->deleteProduct($id);
+            
+            if ($result) {
+                return response()->json([
+                    'message' => 'Product deleted successfully'
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Product not found',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error in AdminController@delete: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'An error occurred while deleting the product',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

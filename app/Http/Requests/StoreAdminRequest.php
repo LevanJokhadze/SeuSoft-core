@@ -24,10 +24,11 @@ class StoreAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'nullable|string',
-            'body' => 'nullable|string',
-            'titles' => 'nullable|json',
-            'images' => 'nullable|json',
+            'id' => 'required|exists:products,id',
+            'title' => 'sometimes|string',
+            'body' => 'sometimes|string',
+            'titles' => 'sometimes|json',
+            'images' => 'sometimes|json',
         ];
     }
 }

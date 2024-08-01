@@ -11,10 +11,4 @@ Route::get('/v1/show-links', [FetchLinksController::class, 'index']);
 
 Route::prefix('v1/contacts')->group(function () {
     Route::post('/', [ContactController::class, 'store']);
-
-    Route::get('/{id}', [ShowContactController::class, 'show']);
-
-    Route::put('/{id}', [ContactController::class, 'update']);
-
-    Route::delete('/{id}', [ContactController::class, 'destroy']);
 });

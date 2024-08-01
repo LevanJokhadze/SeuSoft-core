@@ -29,4 +29,18 @@ class AdminServices
             return null;
         }
     }
+
+    public function getProduct($id)
+    {
+        return Product::find($id);
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = Product::find($id);
+        if ($product) {
+            return $product->delete();
+        }
+        return false;
+    }
 }
