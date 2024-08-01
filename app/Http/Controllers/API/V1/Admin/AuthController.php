@@ -18,7 +18,7 @@ class AuthController extends Controller
 
         $recaptchaScore = $this->verifyRecaptcha($credentials['recaptcha_token']);
 
-        if ($recaptchaScore === true || $recaptchaScore < 0) {
+        if ($recaptchaScore === false || $recaptchaScore < 0.5) {
             return response()->json(['message' => 'Invalid reCAPTCHA'], 400);
         }
         
