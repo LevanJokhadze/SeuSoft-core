@@ -9,6 +9,8 @@ use App\Http\Controllers\API\V1\User\ContactController;
 // login
 Route::group(['middleware' => ['cors']], function () {
     Route::post("/v1/admin/login", [AuthController::class, "login"]);
+    Route::post("/v1/admin/test", [AuthController::class, "createTestUser"]);
+    
 });
 
 // List contacts
