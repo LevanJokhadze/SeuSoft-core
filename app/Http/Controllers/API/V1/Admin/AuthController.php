@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\API\V1\Admin;
 
 use Illuminate\Http\Request;
@@ -7,43 +6,32 @@ use App\Models\API\V1\Admin\Auth as User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAuthRequest;
+use App\Http\Requests\TestAuthRequest;
 
-class AuthController {
-
-    public function login(Request $request)
+class AuthController extends Controller 
+{
+    public function login(TestAuthRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            'recaptcha_token' => 'required',
-        ]);
-
-        Log::info('Login attempt', ['email' => $credentials['email']]);
+        $credentials = $request->validated();
 
         $recaptchaScore = $this->verifyRecaptcha($credentials['recaptcha_token']);
 
         if ($recaptchaScore === false || $recaptchaScore < 0.5) {
-            Log::warning('Login failed: Invalid reCAPTCHA', ['email' => $credentials['email']]);
             return response()->json(['message' => 'Invalid reCAPTCHA'], 400);
         }
-
+        
         $user = User::where('email', $credentials['email'])->first();
-
-        if (!$user) {
-            Log::warning('Login failed: User not found', ['email' => $credentials['email']]);
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        if (!Hash::check($credentials['password'], $user->password)) {
-            Log::warning('Login failed: Invalid password', ['email' => $credentials['email']]);
+        
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-
+        
         $token = $user->createToken('auth_token')->plainTextToken;
         
-        Log::info('Login successful', ['email' => $credentials['email']]);
-
         return response()->json([
+            'success' => true,
             'access_token' => $token,
             'token_type' => 'Bearer',
         ]);
@@ -56,17 +44,12 @@ class AuthController {
                 'secret' => config('services.recaptcha.secret_key'),
                 'response' => $token
             ]);
-
             $body = $response->json();
-
             if (!$body['success']) {
-                Log::error('reCAPTCHA verification failed: ' . json_encode($body['error-codes']));
                 return false;
             }
-
             return $body['score'];
         } catch (\Exception $e) {
-            Log::error('reCAPTCHA validation error: ' . $e->getMessage());
             return false;
         }
     }
@@ -76,5 +59,27 @@ class AuthController {
         return response()->json([
             'site_key' => config('services.recaptcha.site_key')
         ]);
+    }
+
+    public function createTestUser()
+    {
+        try {
+            $user = User::create([
+                'name' => 'Test User',
+                'email' => 'testuser@example.com',
+                'password' => Hash::make('password123'),
+            ]);
+
+            return response()->json([
+                'message' => 'Test user created successfully',
+                'user' => $user
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error('Failed to create test user: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Failed to create test user',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

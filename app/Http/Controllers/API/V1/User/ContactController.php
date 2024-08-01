@@ -37,4 +37,9 @@ class ContactController extends Controller
         }
     }
 
+    public function index() {
+        $contact = contact::all();
+        return response()->json(['data' => $contact]);
+    }
+
 }
