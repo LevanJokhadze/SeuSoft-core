@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\API\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUpdateContactRequest;
-use App\Http\Requests\UpdateUpdateContactRequest;
-use App\Services\UpdateContactServices;
 use Illuminate\Http\Request;
+use App\Services\UpdateContactServices;
 
 class UpdateContactController extends Controller
 {
@@ -37,20 +35,30 @@ class UpdateContactController extends Controller
         ], 201); 
     }
 
-    public function update(storeUpdateContactRequest $request)
+    public function update(Request $request, $id)
     {
-        $admin = $this->updateContactService->updateContact($request->id, $request->title, $request->address, $request->email, $request->number, $request->fb, $request->ig, $request->twitter, $request->in, $request->copyright);
+        $contact = $this->updateContactService->updateContact(
+            $id,
+            $request->title,
+            $request->address,
+            $request->email,
+            $request->number,
+            $request->fb,
+            $request->ig,
+            $request->twitter,
+            $request->in,
+            $request->copyright
+        );
 
-        if ($admin) {
+        if ($contact) {
             return response()->json([
-                'message' => 'Admin updated successfully',
-                'data' => $admin
+                'message' => 'Contact updated successfully',
+                'data' => $contact
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Admin not found',
+                'message' => 'Contact not found',
             ], 404);
         }
     }
-    
 }
