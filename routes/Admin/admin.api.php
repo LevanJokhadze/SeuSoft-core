@@ -14,6 +14,8 @@ Route::post("/v1/admin/login", [AuthController::class, "login"])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/v1/list-contacts', [ContactController::class, 'index']);
     Route::post("/v1/admin/store-product", [AdminController::class, "store"]);
+    Route::post('/v1/admin/upload', [AdminController::class, 'upload']);
+
     // Route::put('/v1/admin/update-product', [AdminController::class, 'update']);
     Route::put('/v1/admin/update-contact', [UpdateContactController::class, 'update']);
     Route::get('/recaptcha-site-key', [AuthController::class, 'getRecaptchaSiteKey']);

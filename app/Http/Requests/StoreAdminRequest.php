@@ -24,9 +24,8 @@ class StoreAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:products,id',
             'title' => 'sometimes|string',
-            'body' => 'sometimes|string',
+            'body' => 'nullable|string',
             'titles' => 'sometimes|json',
             'images' => 'sometimes|json',
         ];
