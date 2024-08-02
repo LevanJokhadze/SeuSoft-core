@@ -15,15 +15,18 @@ class AdminServices
         $product = Admin::find($id);
         if ($product) {
             $updateData = [
-                'title' => $data['title'],
+                'titleEn' => $data['titleEn'],
+                'titleGe' => $data['titleGe'],
             ];
 
-            if (isset($data['body'])) {
-                $updateData['body'] = $data['body'];
+            if (isset($data['bodyEn']) && isset($data['bodyGe'])) {
+                $updateData['bodyEn'] = $data['bodyEn'];
+                $updateData['bodyGe'] = $data['bodyGe'];
             }
 
-            if (isset($data['titles'])) {
-                $updateData['titles'] = $data['titles'];
+            if (isset($data['titlesEn']) && isset($data['titlesGe'])) {
+                $updateData['titlesEn'] = $data['titlesEn'];
+                $updateData['titlesGe'] = $data['titlesGe'];
             }
 
             if (isset($data['images'])) {

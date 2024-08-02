@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('products_table', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->text('body')->nullable();
-            $table->json('titles')->nullable();
-            $table->binary('images')->nullable(); // Changed to binary
+            $table->string('titleEn')->nullable();
+            $table->string('titleGe')->nullable();
+            $table->text('bodyEn')->nullable();
+            $table->text('bodyGe')->nullable();
+            $table->json('titlesEn')->nullable();
+            $table->json('titlesGe')->nullable();
+            $table->binary('images')->nullable();
             $table->timestamps();
         });
     }

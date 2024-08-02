@@ -23,15 +23,18 @@ class AdminController extends Controller
     {
         try {
             $productData = [
-                'title' => $request->title,
+                'titleEn' => $request->titleEn,
+                'titleGe' => $request->titleGe,
             ];
 
             if ($request->type == 1) {
-                $productData['body'] = $request->body;
+                $productData['bodyEn'] = $request->bodyEn;
+                $productData['bodyGe'] = $request->bodyGe;
                 $message = 'Regular product created successfully';
             } else {
                 try {
-                    $productData['titles'] = json_decode($request->titles, true);
+                    $productData['titlesEn'] = json_decode($request->titlesEn, true);
+                    $productData['titlesGe'] = json_decode($request->titlesGe, true);
                     $productData['images'] = json_decode($request->images, true);
                 } catch (\JsonException $e) {
                     return response()->json([
