@@ -20,15 +20,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("/v1/admin/store-product", [AdminController::class, "store"]);
     Route::post('/v1/admin/upload', [AdminController::class, 'upload']);
 
-    // Route::put('/v1/admin/update-product', [AdminController::class, 'update']);
     Route::put('/v1/admin/update-contact', [UpdateContactController::class, 'update']);
     Route::get('/recaptcha-site-key', [AuthController::class, 'getRecaptchaSiteKey']);
     
-    // New routes
     Route::put("/v1/admin/edit-contact/{id}", [UpdateContactController::class, "update"]);
+    Route::put("/v1/admin/edit-product/{id}", [AdminController::class, "update"]);
     Route::delete("/v1/admin/delete-product/{id}", [AdminController::class, "delete"]);
-
-
-
-
 });
