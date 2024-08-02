@@ -7,7 +7,6 @@ use App\Http\Controllers\API\V1\Admin\AdminController;
 use App\Http\Controllers\API\V1\User\ContactController;
 
 // For Tesssting
-Route::post('/v1/admin/store-contact', [UpdateContactController::class, 'store']);
 Route::post("/v1/admin/test", [AuthController::class, "createTestUser"]);
 
 

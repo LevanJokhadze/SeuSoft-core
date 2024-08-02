@@ -15,7 +15,9 @@ class UpdateAdminRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'body' => 'required|string',
+            'body' => 'nullable|string',
+            'titles' => 'sometimes|json',
+            'images' => 'sometimes|json',
         ];
     }
 }

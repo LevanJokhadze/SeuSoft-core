@@ -14,10 +14,23 @@ class AdminServices
     {
         $product = Admin::find($id);
         if ($product) {
-            $product->update([
+            $updateData = [
                 'title' => $data['title'],
-                'body' => $data['body']
-            ]);
+            ];
+
+            if (isset($data['body'])) {
+                $updateData['body'] = $data['body'];
+            }
+
+            if (isset($data['titles'])) {
+                $updateData['titles'] = $data['titles'];
+            }
+
+            if (isset($data['images'])) {
+                $updateData['images'] = $data['images'];
+            }
+
+            $product->update($updateData);
             return $product;
         }
         return false;
