@@ -18,7 +18,8 @@ Route::post("/v1/admin/login", [AuthController::class, "login"])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/v1/list-contacts', [ContactController::class, 'index']);
     Route::post("/v1/admin/store-product", [AdminController::class, "store"]);
-    
+    Route::post("/v1/admin/delete-image", [AdminController::class, "deleteImage"]);
+
     // Footer items
     Route::post("/v1/admin/store-links", [FooterListController::class, "store"]);
     Route::put("/v1/admin/edit-links/{id}", [FooterListController::class, "update"]);

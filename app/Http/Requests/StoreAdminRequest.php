@@ -21,6 +21,7 @@ class StoreAdminRequest extends FormRequest
             'bodyEn' => 'nullable|string',
             'bodyGe' => 'nullable|string',
             'images' => 'sometimes|json',
+            'href'=> 'sometimes|json'
         ];
     }
 }

@@ -18,6 +18,7 @@ class UpdateAdminRequest extends FormRequest
             'titleGe' => 'sometimes|string',
             'titlesEn' => 'sometimes|json',
             'titlesGe' => 'sometimes|json',
+            'href'=>'sometimes|json',
             'bodyEn' => 'nullable|string',
             'bodyGe' => 'nullable|string',
             'images' => 'sometimes|json',

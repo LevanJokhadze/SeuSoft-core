@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('bodyGe')->nullable();
             $table->json('titlesEn')->nullable();
             $table->json('titlesGe')->nullable();
-            $table->binary('images')->nullable();
+            $table->json('images')->nullable();
             $table->json('href')->nullable();
             $table->timestamps();
         });

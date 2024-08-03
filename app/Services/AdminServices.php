@@ -29,6 +29,9 @@ class AdminServices
                 $updateData['titlesEn'] = $data['titlesEn'];
                 $updateData['titlesGe'] = $data['titlesGe'];
             }
+            if (isset($data['href'])) {
+                $updateData['href'] = $data['href'];
+            }
 
             if (isset($data['images'])) {
                 $updateData['images'] = $data['images'];
@@ -41,19 +44,33 @@ class AdminServices
     }
 
     public function deleteProduct($id)
-    {
-        $product = Admin::find($id);
-        if ($product) {
-            if ($product->image) {
-                $imagePath = str_replace('/storage/', '', $product->image);
-                if (Storage::disk('public')->delete($imagePath)) {
-                    return $product->delete();
-                } else {
-                    return $imagePath;
+{
+    $product = Admin::find($id);
+    if ($product) {
+        if ($product->images) {
+            foreach ($product->images as $image) {
+                $imagePath = str_replace('/storage/', '', $image);
+                if (!Storage::disk('public')->delete($imagePath)) {
+                    return false;
                 }
             }
-            
+            return $product->delete();
+        } else {
+            return $product->delete();
         }
+    }
+
+    return false;
+}
+
+public function deleteProductImageByName($imageName)
+{
+    $imagePath = str_replace('/storage/', '', $imageName);
+    if (Storage::disk('public')->delete($imagePath)) {
+        return true;
+    } else {
         return false;
     }
+}
+
 }
