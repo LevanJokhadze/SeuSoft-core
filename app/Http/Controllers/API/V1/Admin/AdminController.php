@@ -86,11 +86,12 @@ class AdminController extends Controller
             
             if ($deleted) {
                 return response()->json([
-                    'message' => 'Product deleted successfully'
+                    'status' => 'Product deleted successfully',
+                    'message' => $deleted
                 ], 200);
             } else {
                 return response()->json([
-                    'message' => 'Product not found',
+                    'message' => $deleted,
                 ], 404);
             }
         } catch (\Exception $e) {

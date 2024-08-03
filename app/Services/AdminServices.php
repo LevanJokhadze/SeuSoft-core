@@ -46,10 +46,13 @@ class AdminServices
         if ($product) {
             if ($product->image) {
                 $imagePath = str_replace('/storage/', '', $product->image);
-                Storage::disk('public')->delete($imagePath);
+                if (Storage::disk('public')->delete($imagePath)) {
+                    return $product->delete();
+                } else {
+                    return $imagePath;
+                }
             }
             
-            return $product->delete();
         }
         return false;
     }
