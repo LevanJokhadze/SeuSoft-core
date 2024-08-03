@@ -12,7 +12,6 @@ class AdminServices
             $productData = [
                 'titleEn' => $request->titleEn,
                 'titleGe' => $request->titleGe,
-                'type' => $request->type,
             ];
 
             if ($request->type == 1) {
