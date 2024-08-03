@@ -21,44 +21,19 @@ class AdminController extends Controller
     
     public function store(StoreAdminRequest $request)
     {
-        try {
-            $productData = [
-                'titleEn' => $request->titleEn,
-                'titleGe' => $request->titleGe,
-            ];
 
-            if ($request->type == 1) {
-                $productData['bodyEn'] = $request->bodyEn;
-                $productData['bodyGe'] = $request->bodyGe;
-                $message = 'Regular product created successfully';
-            } else {
-                try {
-                    $productData['titlesEn'] = json_decode($request->titlesEn, true);
-                    $productData['titlesGe'] = json_decode($request->titlesGe, true);
-                    $productData['href'] = json_decode($request->href, true);
-                    $productData['images'] = json_decode($request->images, true);
-                } catch (\JsonException $e) {
-                    return response()->json([
-                        'message' => 'Invalid JSON data for titles or images',
-                        'error' => $e->getMessage()
-                    ], 400);
-                }
-                $message = 'Ultra product created successfully';
-            }
-
-            $product = Admin::create($productData);
-
+        if($this->adminServices->storeProduct($request)) {
             return response()->json([
-                'message' => $message,
-                'data' => $product
-            ], 201);
-        } catch (\Exception $e) {
-            Log::error('Error in AdminController@store: ' . $e->getMessage());
+                'status' => 'Product Inserted Succesfully',
+                'message' => $request
+            ], 200);
+        } else {
             return response()->json([
-                'message' => 'An error occurred while creating the product',
-                'error' => $e->getMessage()
+                'status' => 'Error While Inserting Product',
+                'message' => $request
             ], 500);
         }
+
     }
 
     public function upload(Request $request)

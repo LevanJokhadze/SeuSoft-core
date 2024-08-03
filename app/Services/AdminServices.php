@@ -6,6 +6,64 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminServices
 {
+    public function storeProduct($request)
+    {
+        try {
+            $productData = [
+                'titleEn' => $request->titleEn,
+                'titleGe' => $request->titleGe,
+            ];
+
+            if ($request->type == 1) {
+                $productData['bodyEn'] = $request->bodyEn;
+                $productData['bodyGe'] = $request->bodyGe;
+                
+                $product = Admin::create($productData);
+
+                if ($product) {
+                    return response()->json([
+                        'message' => 'Regular product created successfully',
+                        'data' => $product
+                    ], 201);
+                } else {
+                    return response()->json([
+                        'message' => 'Regular product not created',
+                        'data' => $product
+                    ], 500);
+                }
+
+
+
+            } else {
+                    $productData['titlesEn'] = json_decode($request->titlesEn, true);
+                    $productData['titlesGe'] = json_decode($request->titlesGe, true);
+                    $productData['href'] = json_decode($request->href, true);
+                    $productData['images'] = json_decode($request->images, true);
+
+                    $product = Admin::create($productData);
+                    if ($product) {
+                        return response()->json([
+                            'message' => 'Ultra product created successfully',
+                            'data' => $product
+                        ], 201);
+                    } else {
+                        return response()->json([
+                            'message' => 'Ultra product not created',
+                            'data' => $product
+                        ], 500);
+                    }
+
+            }
+
+            } catch (\Exception $e) {
+                Log::error('Error in AdminController@store: ' . $e->getMessage());
+                return response()->json([
+                    'message' => 'An error occurred while creating the product',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+    }
+
     public function getProduct($id)
     {
         return Admin::find($id);
