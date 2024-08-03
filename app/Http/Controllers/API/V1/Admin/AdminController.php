@@ -21,19 +21,21 @@ class AdminController extends Controller
     
     public function store(StoreAdminRequest $request)
     {
+        $result = $this->adminService->storeProduct($request);
 
-        if($this->adminServices->storeProduct($request)) {
+        if ($result['success']) {
             return response()->json([
-                'status' => 'Product Inserted Succesfully',
-                'message' => $request
-            ], 200);
+                'status' => 'success',
+                'message' => $result['message'],
+                'data' => $result['data']
+            ], 201);
         } else {
             return response()->json([
-                'status' => 'Error While Inserting Product',
-                'message' => $request
+                'status' => 'error',
+                'message' => $result['message'],
+                'error' => $result['error'] ?? null
             ], 500);
         }
-
     }
 
     public function upload(Request $request)
