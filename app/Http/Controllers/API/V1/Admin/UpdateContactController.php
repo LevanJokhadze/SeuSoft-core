@@ -18,8 +18,10 @@ class UpdateContactController extends Controller
     public function store(Request $request)
     {
         $contact = $this->updateContactService->createContact(
-            $request->title,
-            $request->address,
+            $request->titleEn,
+            $request->titleGe,
+            $request->addressEn,
+            $request->addressGe,
             $request->email,
             $request->number,
             $request->fb,
@@ -39,8 +41,10 @@ class UpdateContactController extends Controller
     {
         $contact = $this->updateContactService->updateContact(
             $id,
-            $request->title,
-            $request->address,
+            $request->titleEn,
+            $request->titleGe,
+            $request->addressEn,
+            $request->addressGe,
             $request->email,
             $request->number,
             $request->fb,

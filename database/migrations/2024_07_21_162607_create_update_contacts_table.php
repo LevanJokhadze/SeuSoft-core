@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('update_contacts', function (Blueprint $table) {
             $table->id();
-            $table->string("title")->index();
-            $table->string("address");
+            $table->string("titleEn");
+            $table->string("titleGe");
+            $table->string("addressEn");
+            $table->string("addressGe");
             $table->string("email");
             $table->string("number");
             $table->string("fb");
