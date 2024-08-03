@@ -35,6 +35,7 @@ class AdminController extends Controller
                 try {
                     $productData['titlesEn'] = json_decode($request->titlesEn, true);
                     $productData['titlesGe'] = json_decode($request->titlesGe, true);
+                    $productData['href'] = json_decode($request->href, true);
                     $productData['images'] = json_decode($request->images, true);
                 } catch (\JsonException $e) {
                     return response()->json([
@@ -61,7 +62,7 @@ class AdminController extends Controller
     }
 
     public function upload(Request $request)
-{
+    {
     $request->validate([
         'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
@@ -76,7 +77,7 @@ class AdminController extends Controller
     Log::info('Image stored at: ' . $imagePath);
 
     return response()->json(['url' => Storage::url($imagePath), 'name' => $imageName]);
-}
+    }
 
     public function delete($id)
     {

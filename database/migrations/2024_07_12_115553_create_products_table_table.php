@@ -22,6 +22,7 @@ return new class extends Migration
             $table->json('titlesEn')->nullable();
             $table->json('titlesGe')->nullable();
             $table->binary('images')->nullable();
+            $table->json('href')->nullable();
             $table->timestamps();
         });
     }

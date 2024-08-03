@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\API\V1\Admin\Admin;
+use Illuminate\Support\Facades\Storage;
 
 class AdminServices
 {
@@ -43,6 +44,11 @@ class AdminServices
     {
         $product = Admin::find($id);
         if ($product) {
+            if ($product->image) {
+                $imagePath = str_replace('/storage/', '', $product->image);
+                Storage::disk('public')->delete($imagePath);
+            }
+            
             return $product->delete();
         }
         return false;
