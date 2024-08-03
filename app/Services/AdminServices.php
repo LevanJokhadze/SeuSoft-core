@@ -6,6 +6,49 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminServices
 {
+    public function storeProduct($request)
+    {
+        try {
+            $productData = [
+                'titleEn' => $request->titleEn,
+                'titleGe' => $request->titleGe,
+            ];
+
+            if ($request->type == 1) {
+                $productData['bodyEn'] = $request->bodyEn;
+                $productData['bodyGe'] = $request->bodyGe;
+            } else {
+                $productData['titlesEn'] = json_decode($request->titlesEn, true);
+                $productData['titlesGe'] = json_decode($request->titlesGe, true);
+                $productData['href'] = json_decode($request->href, true);
+                $productData['images'] = json_decode($request->images, true);
+            }
+
+            $product = Admin::create($productData);
+
+            if ($product) {
+                return [
+                    'success' => true,
+                    'message' => $request->type == 1 ? 'Regular product created successfully' : 'Ultra product created successfully',
+                    'data' => $product
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Product not created',
+                    'data' => null
+                ];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in AdminService@storeProduct: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'An error occurred while creating the product',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
     public function getProduct($id)
     {
         return Admin::find($id);
