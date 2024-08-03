@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\API\V1\Admin\Admin;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class UploadService
 {
@@ -20,9 +21,9 @@ class UploadService
         ];
     } else {
         return [
-            'success' => false,
+            'error' => false,
             'message' => 'Image not saved',
-            'url' => null
+            'error' => null
         ];
     }
    }

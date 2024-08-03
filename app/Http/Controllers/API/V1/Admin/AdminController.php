@@ -49,7 +49,7 @@ class AdminController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => $result['message'],
-                'data' => $result['data']
+                'data' => $result['url']
             ], 201);
         } else {
             return response()->json([
@@ -59,16 +59,7 @@ class AdminController extends Controller
             ], 500);
         }
 
-    $image = $request->file('image');
     
-    $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-    $imageName = $originalName . '_' . rand(1000, 99999) . '.' . $image->getClientOriginalExtension();
-
-    $imagePath = $image->storeAs('images', $imageName, 'public');
-
-    Log::info('Image stored at: ' . $imagePath);
-
-    return response()->json(['url' => Storage::url($imagePath), 'name' => $imageName]);
     }
 
     public function delete($id)
