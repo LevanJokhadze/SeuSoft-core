@@ -7,6 +7,8 @@ use App\Http\Requests\StorecontactRequest;
 use App\Http\Requests\UpdatecontactRequest;
 use App\Http\Controllers\Controller;
 use App\Services\ContactServices;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactNotification;
 
 class ContactController extends Controller
 {
@@ -16,7 +18,7 @@ class ContactController extends Controller
     {
         $this->userService = new ContactServices();
     }
-    public function store(StorecontactRequest $request)
+    public function store(StoreContactRequest $request)
     {
         $contact = $this->userService->saveContact(
             $request->id,
@@ -30,11 +32,25 @@ class ContactController extends Controller
         );
     
         if ($contact) {
+            Mail::to('sandrosmeili@gmail.com')->send(new ContactNotification([
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'number' => $request->number,
+                'service' => $request->service,
+                'company' => $request->company,
+                'message' => $request->message,
+            ]));
+
             return response()->json([
-                'message' => 'Contact created successfully',
+                'message' => 'Contact created | Notif send',
                 'data' => $contact
             ], 201);  
         }
+
+        return response()->json([
+            'message' => 'Failed to create contact',
+        ], 500);
     }
 
     public function index() {
