@@ -61,19 +61,22 @@ class AdminController extends Controller
     }
 
     public function upload(Request $request)
-    {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    $image = $request->file('image');
     
-        $image = $request->file('image');
-        $imageName = time().'.'.$image->getClientOriginalExtension();
-        $imagePath = $image->storeAs('images', $imageName, 'public');
-    
-        Log::info('Image stored at: ' . $imagePath);
-    
-        return response()->json(['url' => Storage::url($imagePath)]);
-    }
+    $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+    $imageName = $originalName . '_' . rand(1000, 99999) . '.' . $image->getClientOriginalExtension();
+
+    $imagePath = $image->storeAs('images', $imageName, 'public');
+
+    Log::info('Image stored at: ' . $imagePath);
+
+    return response()->json(['url' => Storage::url($imagePath), 'name' => $imageName]);
+}
 
     public function delete($id)
     {
@@ -99,50 +102,48 @@ class AdminController extends Controller
     }
 
     public function update(UpdateAdminRequest $request, $id)
-    {
-        try {
-            $validatedData = $request->validated();
-            
-            if (isset($validatedData['titles'])) {
-                try {
-                    $validatedData['titles'] = json_decode($validatedData['titles'], true);
-                } catch (\JsonException $e) {
-                    return response()->json([
-                        'message' => 'Invalid JSON data for titles',
-                        'error' => $e->getMessage()
-                    ], 400);
-                }
-            }
-            
-            if (isset($validatedData['images'])) {
-                try {
-                    $validatedData['images'] = json_decode($validatedData['images'], true);
-                } catch (\JsonException $e) {
-                    return response()->json([
-                        'message' => 'Invalid JSON data for images',
-                        'error' => $e->getMessage()
-                    ], 400);
-                }
-            }
+{
+    try {
+        $productData = [
+            'titleEn' => $request->titleEn,
+            'titleGe' => $request->titleGe,
+        ];
 
-            $result = $this->adminServices->updateProduct($id, $validatedData);
-            
-            if ($result) {
+        if ($request->type == 1) {
+            $productData['bodyEn'] = $request->bodyEn;
+            $productData['bodyGe'] = $request->bodyGe;
+        } else {
+            try {
+                $productData['titlesEn'] = json_decode($request->titlesEn, true);
+                $productData['titlesGe'] = json_decode($request->titlesGe, true);
+                $productData['images'] = json_decode($request->images, true);
+            } catch (\JsonException $e) {
                 return response()->json([
-                    'message' => 'Product updated successfully',
-                    'data' => $result
-                ], 200);
-            } else {
-                return response()->json([
-                    'message' => 'Product not found',
-                ], 404);
+                    'message' => 'Invalid JSON data for titles or images',
+                    'error' => $e->getMessage()
+                ], 400);
             }
-        } catch (\Exception $e) {
-            Log::error('Error in AdminController@update: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'An error occurred while updating the product',
-                'error' => $e->getMessage()
-            ], 500);
         }
+
+        $result = $this->adminServices->updateProduct($id, $productData);
+
+        if ($result) {
+            return response()->json([
+                'message' => 'Product updated successfully',
+                'data' => $result
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Product not found',
+            ], 404);
+        }
+    } catch (\Exception $e) {
+        Log::error('Error in AdminController@update: ' . $e->getMessage());
+        return response()->json([
+            'message' => 'An error occurred while updating the product',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
 }

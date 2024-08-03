@@ -14,9 +14,12 @@ class UpdateAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string',
-            'body' => 'nullable|string',
-            'titles' => 'sometimes|json',
+            'titleEn' => 'sometimes|string',
+            'titleGe' => 'sometimes|string',
+            'titlesEn' => 'sometimes|json',
+            'titlesGe' => 'sometimes|json',
+            'bodyEn' => 'nullable|string',
+            'bodyGe' => 'nullable|string',
             'images' => 'sometimes|json',
         ];
     }
