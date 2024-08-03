@@ -31,7 +31,8 @@ class AdminController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => $result['message'],
-                'data' => $result['data']
+                'url' => $result['url'],
+                'name' => $result['name']
             ], 201);
         } else {
             return response()->json([

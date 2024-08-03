@@ -17,7 +17,8 @@ class UploadService
         return [
             'success' => true,
             'message' => 'Image Saved Successfully',
-            'url' => Storage::url($imagePath)
+            'url' => Storage::url($imagePath),
+            'name' => $imageName
         ];
     } else {
         return [
