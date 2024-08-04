@@ -6,11 +6,14 @@ use App\Models\API\V1\Admin\UpdateContact;
 
 class UpdateContactServices
 {
-    public function createContact($title, $address, $email, $number, $fb, $ig, $twitter, $in, $copyright)
+    public function createContact($name, $titleEn, $titleGe, $addressEn, $addressGe, $email, $number, $fb, $ig, $twitter, $in, $copyright)
     {
         $contact = new UpdateContact(); 
-        $contact->title = $title;
-        $contact->address = $address;
+        $contact->name = $name;
+        $contact->addressGe = $addressGe;
+        $contact->addressEn = $addressEn;
+        $contact->titleEn = $titleEn;
+        $contact->titleGe = $titleGe;
         $contact->email = $email;
         $contact->number = $number;
         $contact->fb = $fb;
@@ -23,13 +26,16 @@ class UpdateContactServices
         return $contact;
     }
 
-    public function updateContact($id, $title, $address, $email, $number, $fb, $ig, $twitter, $in, $copyright)
+    public function updateContact($id, $name, $titleEn, $titleGe, $addressEn, $addressGe, $email, $number, $fb, $ig, $twitter, $in, $copyright)
     {
         $contact = UpdateContact::find($id);
 
         if ($contact) {
-            $contact->title = $title ?? $contact->title;
-            $contact->address = $address ?? $contact->address;
+            $contact->name = $name ?? $contact->name;
+            $contact->titleEn = $titleEn ?? $contact->titleEn;
+            $contact->titleGe = $titleGe ?? $contact->titleGe;
+            $contact->addressEn = $addressEn ?? $contact->addressEn;
+            $contact->addressGe = $addressGe ?? $contact->addressGe;
             $contact->email = $email ?? $contact->email;
             $contact->number = $number ?? $contact->number;
             $contact->fb = $fb ?? $contact->fb;

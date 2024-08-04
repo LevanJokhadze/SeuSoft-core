@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/v1/admin/upload', [AdminController::class, 'upload']);
 
     Route::put('/v1/admin/update-contact', [UpdateContactController::class, 'update']);
+    Route::post('/v1/admin/add-contact', [UpdateContactController::class, 'store']);
     Route::get('/recaptcha-site-key', [AuthController::class, 'getRecaptchaSiteKey']);
     
     Route::put("/v1/admin/edit-contact/{id}", [UpdateContactController::class, "update"]);

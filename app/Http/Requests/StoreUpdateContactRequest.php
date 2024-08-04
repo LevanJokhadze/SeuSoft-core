@@ -14,6 +14,7 @@ class StoreUpdateContactRequest extends FormRequest
     public function rules()
     {
         return [
+            "name"=> "required|string|max:255",
             'titleEn' => 'required|string|max:255',
             'titleGe' => 'required|string|max:255',
             'addressEn' => 'required|string|max:255',
