@@ -35,7 +35,7 @@ class UpdateContactController extends Controller
         return response()->json([
             'message' => 'Contact created successfully',
             'data' => $contact
-        ], 201); 
+        ], 200); 
     }
 
     public function update(Request $request, $id)
