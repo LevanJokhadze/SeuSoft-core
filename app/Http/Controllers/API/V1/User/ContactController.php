@@ -32,7 +32,7 @@ class ContactController extends Controller
         );
     
         if ($contact) {
-            Mail::to('sandrosmeili@gmail.com')->send(new ContactNotification([
+            Mail::to($request->email)->send(new ContactNotification([
                 'name' => $request->name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
