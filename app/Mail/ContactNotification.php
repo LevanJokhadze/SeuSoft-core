@@ -20,7 +20,7 @@ class ContactNotification extends Mailable
 
     public function build()
     {
-        return $this->subject('New Contact Form Submission')
+        return $this->subject('SeuSoft')
                     ->view('emails.contact-notification');
     }
 }
