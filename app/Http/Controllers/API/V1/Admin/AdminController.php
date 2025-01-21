@@ -80,75 +80,77 @@ class AdminController extends Controller
     }
 
     public function update(UpdateAdminRequest $request, $id)
-{
-    try {
-        $productData = [
-            'titleEn' => $request->titleEn,
-            'titleGe' => $request->titleGe,
-        ];
+    {
+        try {
+            $productData = [
+                'titleEn' => $request->titleEn,
+                'titleGe' => $request->titleGe,
+            ];
 
-        if ($request->type == 1) {
-            $productData['bodyEn'] = $request->bodyEn;
-            $productData['bodyGe'] = $request->bodyGe;
-        } else {
-            try {
-                $productData['titlesEn'] = json_decode($request->titlesEn, true);
-                $productData['titlesGe'] = json_decode($request->titlesGe, true);
-                $productData['href'] = json_decode($request->href, true);
-                $productData['images'] = json_decode($request->images, true);
-            } catch (\JsonException $e) {
-                return response()->json([
-                    'message' => 'Invalid JSON data for titles or images',
-                    'error' => $e->getMessage()
-                ], 400);
+            if ($request->type == 1) {
+                $productData['bodyEn'] = $request->bodyEn;
+                $productData['bodyGe'] = $request->bodyGe;
+            } else {
+                try {
+                    $productData['titlesEn'] = json_decode($request->titlesEn, true);
+                    $productData['titlesGe'] = json_decode($request->titlesGe, true);
+                    $productData['aboutGe'] = json_decode($request->aboutGe, true);
+                    $productData['aboutEn'] = json_decode($request->aboutEn, true);
+                    $productData['href'] = json_decode($request->href, true);
+                    $productData['images'] = json_decode($request->images, true);
+                } catch (\JsonException $e) {
+                    return response()->json([
+                        'message' => 'Invalid JSON data for titles or images',
+                        'error' => $e->getMessage()
+                    ], 400);
+                }
             }
-        }
 
-        $result = $this->adminServices->updateProduct($id, $productData);
+            $result = $this->adminServices->updateProduct($id, $productData);
 
-        if ($result) {
+            if ($result) {
+                return response()->json([
+                    'message' => 'Product updated successfully',
+                    'data' => $result
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Product not found',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in AdminController@update: ' . $e->getMessage());
             return response()->json([
-                'message' => 'Product updated successfully',
-                'data' => $result
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => 'Product not found',
-            ], 404);
+                'message' => 'An error occurred while updating the product',
+                'error' => $e->getMessage()
+            ], 500);
         }
-    } catch (\Exception $e) {
-        Log::error('Error in AdminController@update: ' . $e->getMessage());
-        return response()->json([
-            'message' => 'An error occurred while updating the product',
-            'error' => $e->getMessage()
-        ], 500);
     }
-}
-public function deleteImage(Request $request)
-{
-    $request->validate([
-        'imageName' => 'required|string',
-    ]);
+    public function deleteImage(Request $request)
+    {
+        $request->validate([
+            'imageName' => 'required|string',
+        ]);
 
-    try {
-        $deleted = $this->adminServices->deleteProductImageByName($request->imageName);
-        
-        if ($deleted) {
+        try {
+            $deleted = $this->adminServices->deleteProductImageByName($request->imageName);
+            
+            if ($deleted) {
+                return response()->json([
+                    'status' => 'Image deleted successfully',
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Image not found or could not be deleted',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in AdminController@deleteImage: ' . $e->getMessage());
             return response()->json([
-                'status' => 'Image deleted successfully',
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => 'Image not found or could not be deleted',
-            ], 404);
+                'message' => 'An error occurred while deleting the image',
+                'error' => $e->getMessage()
+            ], 500);
         }
-    } catch (\Exception $e) {
-        Log::error('Error in AdminController@deleteImage: ' . $e->getMessage());
-        return response()->json([
-            'message' => 'An error occurred while deleting the image',
-            'error' => $e->getMessage()
-        ], 500);
-    }
 }
 
 

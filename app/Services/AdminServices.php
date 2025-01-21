@@ -21,6 +21,8 @@ class AdminServices
                 $productData['titlesEn'] = json_decode($request->titlesEn, true);
                 $productData['titlesGe'] = json_decode($request->titlesGe, true);
                 $productData['href'] = json_decode($request->href, true);
+                $productData['aboutGe'] = json_decode($request->aboutGe, true);
+                $productData['aboutEn'] = json_decode($request->aboutEn, true);
                 $productData['images'] = json_decode($request->images, true);
             }
 
@@ -72,6 +74,12 @@ class AdminServices
                 $updateData['titlesEn'] = $data['titlesEn'];
                 $updateData['titlesGe'] = $data['titlesGe'];
             }
+
+            if (isset($data['aboutEn']) && isset($data['aboutGe'])) {
+                $updateData['aboutEn'] = $data['aboutEn'];
+                $updateData['aboutGe'] = $data['aboutGe'];
+            }
+
             if (isset($data['href'])) {
                 $updateData['href'] = $data['href'];
             }
