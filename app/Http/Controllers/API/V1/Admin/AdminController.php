@@ -90,20 +90,20 @@ class AdminController extends Controller
             if ($request->type == 1) {
                 $productData['bodyEn'] = $request->bodyEn;
                 $productData['bodyGe'] = $request->bodyGe;
-            } else {
-                try {
+            } else if ($request->type == 2) {
                     $productData['titlesEn'] = json_decode($request->titlesEn, true);
                     $productData['titlesGe'] = json_decode($request->titlesGe, true);
                     $productData['aboutGe'] = json_decode($request->aboutGe, true);
                     $productData['aboutEn'] = json_decode($request->aboutEn, true);
                     $productData['href'] = json_decode($request->href, true);
                     $productData['images'] = json_decode($request->images, true);
-                } catch (\JsonException $e) {
-                    return response()->json([
-                        'message' => 'Invalid JSON data for titles or images',
-                        'error' => $e->getMessage()
-                    ], 400);
-                }
+     
+            } else {
+                    $productData['titlesEn'] = json_decode($request->titlesEn, true);
+                    $productData['titlesGe'] = json_decode($request->titlesGe, true);
+                    $productData['aboutGe'] = json_decode($request->aboutGe, true);
+                    $productData['aboutEn'] = json_decode($request->aboutEn, true);
+                    $productData['images'] = json_decode($request->images, true);
             }
 
             $result = $this->adminServices->updateProduct($id, $productData);

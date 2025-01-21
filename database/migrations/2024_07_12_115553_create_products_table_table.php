@@ -24,6 +24,7 @@ return new class extends Migration
             $table->json('aboutGe')->nullable();
             $table->json('aboutEn')->nullable();
             $table->json('images')->nullable();
+            $table->integer('type')->nullable();
             $table->json('href')->nullable();
             $table->timestamps();
         });
