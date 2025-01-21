@@ -17,10 +17,17 @@ class AdminServices
             if ($request->type == 1) {
                 $productData['bodyEn'] = $request->bodyEn;
                 $productData['bodyGe'] = $request->bodyGe;
-            } else {
+            } else if ($request->type == 2) {
                 $productData['titlesEn'] = json_decode($request->titlesEn, true);
                 $productData['titlesGe'] = json_decode($request->titlesGe, true);
                 $productData['href'] = json_decode($request->href, true);
+                $productData['aboutGe'] = json_decode($request->aboutGe, true);
+                $productData['aboutEn'] = json_decode($request->aboutEn, true);
+                $productData['images'] = json_decode($request->images, true);
+            }
+            else {
+                $productData['titlesEn'] = json_decode($request->titlesEn, true);
+                $productData['titlesGe'] = json_decode($request->titlesGe, true);
                 $productData['aboutGe'] = json_decode($request->aboutGe, true);
                 $productData['aboutEn'] = json_decode($request->aboutEn, true);
                 $productData['images'] = json_decode($request->images, true);
