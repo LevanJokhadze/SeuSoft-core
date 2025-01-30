@@ -20,7 +20,7 @@ class StoreUpdateContactRequest extends FormRequest
             'addressEn' => 'required|string|max:255',
             'addressGe' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
-            'number' => 'required|string|max:20',
+            'number' => 'required|string|max:40',
             'fb' => 'nullable|string|max:255',
             'ig' => 'nullable|string|max:255',
             'twitter' => 'nullable|string|max:255',
