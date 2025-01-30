@@ -111,9 +111,7 @@ class AdminServices
         if ($product->images) {
             foreach ($product->images as $image) {
                 $imagePath = str_replace('/storage/', '', $image);
-                if (!Storage::disk('public')->delete($imagePath)) {
-                    return false;
-                }
+                
             }
             return $product->delete();
         } else {

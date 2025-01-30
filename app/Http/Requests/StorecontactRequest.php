@@ -17,7 +17,7 @@ class StorecontactRequest extends FormRequest
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'number' => 'string|min:8|max:15',
+            'number' => 'string|min:8|max:155',
             'service' => 'required|string|max:255',
             'company' => 'required|string|max:255',
             'message' => 'required|string|max:545'
